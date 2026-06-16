@@ -1,0 +1,1525 @@
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Riccardo Visconti | Portfolio</title>
+    
+    <!-- Google Fonts: Outfit (Headers) & Inter (Body) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Anime.js CDN for stagger & scroll animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.2/anime.min.js"></script>
+
+    <style>
+      /* ==========================================
+         DESIGN SYSTEM VARIABLES
+         ========================================== */
+      :root {
+        --bg-app: #030712;
+        --bg-card: rgba(17, 24, 39, 0.4);
+        --bg-card-hover: rgba(17, 24, 39, 0.6);
+        --border: rgba(255, 255, 255, 0.05);
+        --border-hover: rgba(255, 255, 255, 0.12);
+        
+        --text-primary: #f9fafb;
+        --text-secondary: #94a3b8;
+        --text-muted: #4b5563;
+        
+        --primary: #8b5cf6;
+        --primary-glow: rgba(139, 92, 246, 0.15);
+        --secondary: #06b6d4;
+        --secondary-glow: rgba(6, 182, 212, 0.15);
+        
+        --dot-color: rgba(255, 255, 255, 0.03);
+        --shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.7);
+        
+        --sans-font: 'Inter', sans-serif;
+        --heading-font: 'Outfit', sans-serif;
+      }
+
+      :root.light-theme {
+        --bg-app: #f8fafc;
+        --bg-card: rgba(255, 255, 255, 0.7);
+        --bg-card-hover: rgba(255, 255, 255, 0.95);
+        --border: rgba(0, 0, 0, 0.06);
+        --border-hover: rgba(0, 0, 0, 0.15);
+        
+        --text-primary: #0f172a;
+        --text-secondary: #475569;
+        --text-muted: #94a3b8;
+        
+        --primary: #6d28d9;
+        --primary-glow: rgba(109, 40, 217, 0.1);
+        --secondary: #0891b2;
+        --secondary-glow: rgba(8, 145, 178, 0.1);
+        
+        --dot-color: rgba(0, 0, 0, 0.04);
+        --shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.1);
+      }
+
+      /* ==========================================
+         BASE RESET & CONTAINER
+         ========================================== */
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        font-family: var(--sans-font);
+        background-color: var(--bg-app);
+        color: var(--text-primary);
+        overflow-x: hidden;
+        transition: background-color 0.4s ease, color 0.4s ease;
+      }
+
+      .app-wrapper {
+        position: relative;
+        min-height: 100vh;
+      }
+
+      /* Dotted Background Overlay */
+      .bg-dots {
+        position: fixed;
+        inset: 0;
+        background-image: radial-gradient(var(--dot-color) 1.5px, transparent 1.5px);
+        background-size: 24px 24px;
+        z-index: 1;
+        pointer-events: none;
+      }
+
+      /* Floating particles canvas background */
+      #particles-canvas {
+        position: fixed;
+        inset: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: 2;
+        pointer-events: none;
+      }
+
+      .container {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 0 24px;
+        position: relative;
+        z-index: 10;
+      }
+
+      /* ==========================================
+         CUSTOM INTERACTIVE CURSOR
+         ========================================== */
+      #custom-cursor {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background-color: var(--secondary);
+        box-shadow: 0 0 20px var(--secondary), 0 0 40px var(--secondary-glow);
+        transform: translate3d(-50%, -50%, 0);
+        pointer-events: none;
+        z-index: 9999;
+        mix-blend-mode: screen;
+        opacity: 0.8;
+        display: none;
+      }
+
+      @media (min-width: 1024px) {
+        #custom-cursor {
+          display: block;
+        }
+      }
+
+      /* ==========================================
+         TYPOGRAPHY & UTILITIES
+         ========================================== */
+      h1, h2, h3, h4 {
+        font-family: var(--heading-font);
+        font-weight: 700;
+      }
+
+      p {
+        line-height: 1.6;
+        color: var(--text-secondary);
+      }
+
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 24px;
+        border-radius: 12px;
+        font-family: var(--sans-font);
+        font-size: 14px;
+        font-weight: 600;
+        text-decoration: none;
+        cursor: pointer;
+        transition: all 0.25s ease;
+      }
+
+      .btn-primary {
+        background-color: var(--primary);
+        color: #ffffff;
+        border: 1px solid transparent;
+        box-shadow: 0 4px 14px rgba(139, 92, 246, 0.25);
+      }
+
+      .btn-primary:hover {
+        background-color: var(--primary);
+        filter: brightness(1.1);
+        transform: translateY(-2px);
+      }
+
+      .btn-secondary {
+        background-color: rgba(255, 255, 255, 0.05);
+        color: var(--text-primary);
+        border: 1px solid var(--border);
+      }
+
+      .btn-secondary:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+        border-color: var(--border-hover);
+        transform: translateY(-2px);
+      }
+
+      /* ==========================================
+         NAVIGATION HEADER
+         ========================================== */
+      header.navbar-header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 70px;
+        background-color: rgba(3, 7, 18, 0.6);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border-bottom: 1px solid var(--border);
+        z-index: 1000;
+        transition: background-color 0.4s ease;
+      }
+
+      .light-theme header.navbar-header {
+        background-color: rgba(248, 250, 252, 0.6);
+      }
+
+      .navbar-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 100%;
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 0 24px;
+      }
+
+      .nav-logo {
+        font-family: var(--heading-font);
+        font-size: 22px;
+        font-weight: 800;
+        color: var(--text-primary);
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .nav-logo .logo-dot {
+        width: 8px;
+        height: 8px;
+        background-color: var(--secondary);
+        border-radius: 50%;
+        box-shadow: 0 0 10px var(--secondary);
+      }
+
+      .nav-links {
+        display: none;
+        align-items: center;
+        gap: 24px;
+      }
+
+      @media (min-width: 768px) {
+        .nav-links {
+          display: flex;
+        }
+      }
+
+      .nav-link {
+        color: var(--text-secondary);
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 500;
+        transition: color 0.2s ease;
+      }
+
+      .nav-link:hover {
+        color: var(--text-primary);
+      }
+
+      .nav-actions {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+      }
+
+      .theme-btn {
+        background: none;
+        border: 1px solid var(--border);
+        width: 38px;
+        height: 38px;
+        border-radius: 10px;
+        color: var(--text-secondary);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease;
+      }
+
+      .theme-btn:hover {
+        color: var(--text-primary);
+        border-color: var(--border-hover);
+        background-color: rgba(255, 255, 255, 0.05);
+      }
+
+      /* ==========================================
+         HERO SECTION
+         ========================================== */
+      section.hero-sec {
+        padding: 150px 0 80px;
+        min-height: 85vh;
+        display: flex;
+        align-items: center;
+      }
+
+      .hero-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 48px;
+        align-items: center;
+      }
+
+      @media (min-width: 900px) {
+        .hero-grid {
+          grid-template-columns: 1.2fr 0.8fr;
+        }
+      }
+
+      .hero-content {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .hero-badge {
+        align-self: flex-start;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 14px;
+        border-radius: 20px;
+        background-color: var(--primary-glow);
+        border: 1px solid rgba(139, 92, 246, 0.15);
+        color: #c084fc;
+        font-size: 12px;
+        font-weight: 600;
+      }
+
+      .light-theme .hero-badge {
+        color: var(--primary);
+      }
+
+      .hero-content h1 {
+        font-size: 42px;
+        font-weight: 900;
+        letter-spacing: -1.5px;
+        line-height: 1.1;
+      }
+
+      @media (min-width: 600px) {
+        .hero-content h1 {
+          font-size: 60px;
+        }
+      }
+
+      /* Shiny Text Effect from React Bits */
+      .shiny-text {
+        background: linear-gradient(90deg, var(--text-secondary) 0%, var(--text-secondary) 30%, var(--text-primary) 50%, var(--text-secondary) 70%, var(--text-secondary) 100%);
+        background-size: 200% auto;
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: shine 5s linear infinite;
+        font-weight: 600;
+      }
+
+      @keyframes shine {
+        0% { background-position: 200% center; }
+        100% { background-position: -200% center; }
+      }
+
+      .hero-content p {
+        font-size: 16px;
+        max-width: 580px;
+      }
+
+      .hero-buttons {
+        display: flex;
+        gap: 16px;
+        margin-top: 10px;
+      }
+
+      /* 3D Tilted Card photo for Hero */
+      .hero-image-wrapper {
+        display: flex;
+        justify-content: center;
+        perspective: 1000px;
+      }
+
+      .profile-tilt-container {
+        width: 280px;
+        height: 280px;
+        border-radius: 24px;
+        padding: 8px;
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        box-shadow: 0 20px 40px -15px rgba(139, 92, 246, 0.4);
+        position: relative;
+        transform-style: preserve-3d;
+        transition: transform 0.1s ease;
+      }
+
+      .profile-image-card {
+        width: 100%;
+        height: 100%;
+        border-radius: 18px;
+        overflow: hidden;
+        background-color: #0b0f19;
+        position: relative;
+        transform: translateZ(15px); /* push elements slightly forward in 3D */
+      }
+
+      .profile-image-card img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        opacity: 0.95;
+      }
+
+      /* ==========================================
+         SECTIONS GLOBAL
+         ========================================== */
+      section.section {
+        padding: 80px 0;
+        border-top: 1px solid var(--border);
+      }
+
+      .section-header {
+        margin-bottom: 40px;
+      }
+
+      .section-header h2 {
+        font-size: 32px;
+        font-weight: 800;
+        letter-spacing: -0.5px;
+        margin-bottom: 8px;
+      }
+
+      .section-header p {
+        font-size: 15px;
+        color: var(--text-secondary);
+      }
+
+      .glass-card {
+        background-color: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        padding: 32px;
+        box-shadow: var(--shadow);
+        transition: border-color 0.3s ease, background-color 0.3s ease, transform 0.3s ease;
+      }
+
+      .glass-card:hover {
+        border-color: var(--border-hover);
+        background-color: var(--bg-card-hover);
+      }
+
+      /* ==========================================
+         ABOUT SECTION
+         ========================================== */
+      .about-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 24px;
+      }
+
+      @media (min-width: 768px) {
+        .about-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+
+      .education-timeline {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+        position: relative;
+        padding-left: 20px;
+        border-left: 2px solid var(--border);
+      }
+
+      .timeline-item {
+        position: relative;
+      }
+
+      .timeline-dot {
+        position: absolute;
+        left: -27px;
+        top: 6px;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background-color: var(--secondary);
+        border: 2px solid var(--bg-app);
+      }
+
+      .timeline-date {
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--secondary);
+        margin-bottom: 4px;
+      }
+
+      .timeline-item h4 {
+        font-size: 16px;
+        font-weight: 700;
+        margin-bottom: 2px;
+      }
+
+      .timeline-item span {
+        font-size: 13px;
+        color: var(--text-secondary);
+        font-style: italic;
+      }
+
+      .timeline-item p {
+        font-size: 14px;
+        margin-top: 8px;
+      }
+
+      .timeline-list {
+        margin-top: 8px;
+        padding-left: 16px;
+        font-size: 13px;
+        color: var(--text-secondary);
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+
+      /* ==========================================
+         SKILLS SECTION
+         ========================================== */
+      .skills-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 24px;
+      }
+
+      @media (min-width: 600px) {
+        .skills-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+
+      @media (min-width: 900px) {
+        .skills-grid {
+          grid-template-columns: repeat(3, 1fr);
+        }
+      }
+
+      .skills-card h3 {
+        font-size: 16px;
+        font-weight: 700;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: var(--text-primary);
+        border-bottom: 1px solid var(--border);
+        padding-bottom: 8px;
+      }
+
+      .skill-tag-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .skill-tag {
+        font-size: 13px;
+        font-weight: 500;
+        padding: 6px 12px;
+        background-color: rgba(255, 255, 255, 0.03);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        color: var(--text-secondary);
+        transition: all 0.2s ease;
+      }
+
+      .skill-tag:hover {
+        background-color: var(--primary-glow);
+        color: var(--text-primary);
+        border-color: rgba(139, 92, 246, 0.2);
+        transform: translateY(-1px);
+      }
+
+      .lang-list {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        width: 100%;
+      }
+
+      .lang-item {
+        display: flex;
+        justify-content: space-between;
+        font-size: 14px;
+      }
+
+      .lang-level {
+        font-weight: 600;
+        color: var(--secondary);
+      }
+
+      /* ==========================================
+         PROJECTS SECTION
+         ========================================== */
+      .projects-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 24px;
+      }
+
+      @media (min-width: 768px) {
+        .projects-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+
+      .project-card {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        transform-style: preserve-3d;
+        transition: transform 0.1s ease, border-color 0.3s ease;
+        cursor: pointer;
+      }
+
+      .project-badge {
+        align-self: flex-start;
+        font-size: 11px;
+        font-weight: 600;
+        padding: 4px 10px;
+        border-radius: 12px;
+        background-color: var(--secondary-glow);
+        color: var(--secondary);
+        border: 1px solid rgba(6, 182, 212, 0.15);
+      }
+
+      .project-card h3 {
+        font-size: 18px;
+        font-weight: 700;
+        color: var(--text-primary);
+      }
+
+      .project-card p {
+        font-size: 14px;
+        flex-grow: 1;
+      }
+
+      .project-bullets {
+        padding-left: 16px;
+        font-size: 13px;
+        color: var(--text-secondary);
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        margin-top: 4px;
+      }
+
+      /* ==========================================
+         ACADEMIC COURSES
+         ========================================== */
+      .courses-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 16px;
+      }
+
+      .course-card {
+        padding: 20px;
+        border-radius: 14px;
+        border: 1px solid var(--border);
+        background: rgba(255,255,255,0.01);
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        transition: all 0.25s ease;
+      }
+
+      .course-card:hover {
+        background: var(--bg-card);
+        border-color: var(--border-hover);
+        transform: translateY(-2px);
+      }
+
+      .course-icon-box {
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+        background-color: var(--secondary-glow);
+        color: var(--secondary);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+
+      .course-info h4 {
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--text-primary);
+      }
+
+      .course-info span {
+        font-size: 11px;
+        color: var(--text-secondary);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      /* ==========================================
+         CONTACT SECTION
+         ========================================== */
+      .contact-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 32px;
+      }
+
+      @media (min-width: 900px) {
+        .contact-grid {
+          grid-template-columns: 0.8fr 1.2fr;
+        }
+      }
+
+      .contact-info-list {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+      }
+
+      .contact-info-item {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+      }
+
+      .contact-icon-box {
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
+        background-color: var(--primary-glow);
+        color: var(--primary);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+        border: 1px solid rgba(139, 92, 246, 0.15);
+      }
+
+      .contact-info-text h4 {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--text-secondary);
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+      }
+
+      .contact-info-text p {
+        font-size: 15px;
+        font-weight: 500;
+        color: var(--text-primary);
+      }
+
+      .contact-form {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      .form-row {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+
+      @media (min-width: 600px) {
+        .form-row {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+
+      .form-field {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+
+      .form-field label {
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--text-secondary);
+      }
+
+      .form-field input, .form-field textarea {
+        background-color: rgba(255, 255, 255, 0.02);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 12px;
+        color: var(--text-primary);
+        font-family: var(--sans-font);
+        font-size: 14px;
+        outline: none;
+        transition: all 0.25s ease;
+      }
+
+      .form-field input:focus, .form-field textarea:focus {
+        border-color: var(--secondary);
+        background-color: rgba(255, 255, 255, 0.05);
+      }
+
+      /* ==========================================
+         FOOTER
+         ========================================== */
+      footer {
+        padding: 40px 0;
+        border-top: 1px solid var(--border);
+        text-align: center;
+        font-size: 13px;
+        color: var(--text-secondary);
+      }
+
+      footer p {
+        font-size: 13px;
+      }
+    </style>
+  </head>
+  <body>
+    
+    <div class="app-wrapper">
+      <!-- Starfield particles backdrop -->
+      <canvas id="particles-canvas"></canvas>
+      
+      <!-- Overlay grid dots -->
+      <div class="bg-dots"></div>
+      
+      <!-- Mouse follower cursor glow -->
+      <div id="custom-cursor"></div>
+
+      <!-- Navigation Header -->
+      <header class="navbar-header">
+        <div class="navbar-container">
+          <a href="#" class="nav-logo">
+            RV
+            <span class="logo-dot"></span>
+          </a>
+          
+          <nav class="nav-links">
+            <a href="#" class="nav-link">Home</a>
+            <a href="#about" class="nav-link">About</a>
+            <a href="#skills" class="nav-link">Skills</a>
+            <a href="#projects" class="nav-link">Progetti</a>
+            <a href="#contact" class="nav-link">Contatti</a>
+          </nav>
+          
+          <div class="nav-actions">
+            <button id="theme-toggle" class="theme-btn" title="Toggle theme">
+              <i data-lucide="sun"></i>
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <!-- Hero Section -->
+      <section class="hero-sec container">
+        <div class="hero-grid">
+          <div class="hero-content">
+            <div class="hero-badge">
+              <i data-lucide="graduation-cap" width="14" height="14"></i>
+              <span>USI Computational Science Master</span>
+            </div>
+            
+            <h1>
+              Ciao, sono <br>
+              <span id="hero-title" class="bg-clip-text text-transparent bg-gradient-to-r from-violet-400 to-cyan-400">
+                Riccardo Visconti
+              </span>
+            </h1>
+            
+            <p class="shiny-text">
+              Computational Science Master's Student @ USI | Mathematics Graduate
+            </p>
+            
+            <p>
+              Sono uno studente magistrale in Computational Science all'USI, laureato triennale in Matematica. 
+              Sviluppo modelli e algoritmi combinando analisi quantitativa, machine learning e calcolo scientifico 
+              per risolvere problemi complessi basati sui dati.
+            </p>
+            
+            <div class="hero-buttons">
+              <a href="CV_Riccardo_Visconti.pdf" target="_blank" class="btn btn-primary">
+                <i data-lucide="file-text" width="16" height="16"></i>
+                Scarica CV (PDF)
+              </a>
+              <a href="#projects" class="btn btn-secondary">
+                <i data-lucide="code" width="16" height="16"></i>
+                Vedi Progetti
+              </a>
+            </div>
+          </div>
+
+          <!-- Interactive 3D Card -->
+          <div class="hero-image-wrapper">
+            <div class="profile-tilt-container" id="profile-card">
+              <div class="profile-image-card">
+                <img src="profile.jpg" alt="Riccardo Visconti Photo" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- About Section -->
+      <section id="about" class="section container">
+        <div class="section-header">
+          <h2>Su di me</h2>
+          <p>La mia formazione accademica e il mio background</p>
+        </div>
+        
+        <div class="about-grid">
+          <!-- Profile Card -->
+          <div class="glass-card">
+            <h3 style="font-size: 20px; margin-bottom: 12px; color: var(--text-primary)">Profilo Professionale</h3>
+            <p style="margin-bottom: 16px;">
+              Studente magistrale motivato in Computational Science presso l'USI (Università della Svizzera italiana), 
+              con una laurea triennale in Matematica presso l'Università degli Studi di Milano-Bicocca.
+            </p>
+            <p>
+              Integro concetti teorici avanzati di matematica con strumenti pratici di calcolo computazionale, 
+              sviluppando progetti applicativi che spaziano dalla restorazione bayesiana di immagini microscopiche in 
+              frequenza ai modelli di diffusione 3D per l'object detection LiDAR. Cerco posizioni di stage o part-time 
+              per mettere a disposizione le mie competenze quantitative nel machine learning e nell'analisi dati.
+            </p>
+          </div>
+
+          <!-- Timeline Card -->
+          <div class="glass-card">
+            <h3 style="font-size: 20px; margin-bottom: 20px; color: var(--text-primary)">Istruzione</h3>
+            <div class="education-timeline">
+              
+              <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-date">Feb 2026 - Presente</div>
+                <h4>Laurea Magistrale in Computational Science</h4>
+                <span>Università della Svizzera italiana (USI), Lugano</span>
+                <p>Percorso focalizzato sul calcolo ad alte prestazioni, machine learning applicato, modellazione e metodi stocastici.</p>
+              </div>
+
+              <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-date">Ott 2022 - Mar 2026</div>
+                <h4>Laurea Triennale in Matematica</h4>
+                <span>Università degli Studi di Milano-Bicocca, Milano</span>
+                <p>Focus curricolare: Analisi Matematica, Algebra e Computer Science.</p>
+                <ul class="timeline-list">
+                  <li><strong>Tesi:</strong> Fondamenti matematici della Crittografia: Dal sistema RSA ai protocolli Quantistici</li>
+                  <li>Studio dettagliato dei protocolli di crittografia classica e Quantum Key Distribution (QKD, BB84).</li>
+                </ul>
+              </div>
+
+              <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-date">2017 - 2022</div>
+                <h4>Diploma di Liceo Scientifico</h4>
+                <span>Istituto Elvetico Salesiani Don Bosco, Lugano</span>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Skills Section -->
+      <section id="skills" class="section container">
+        <div class="section-header">
+          <h2>Competenze Tecniche</h2>
+          <p>I miei strumenti di lavoro e aree di specializzazione</p>
+        </div>
+        
+        <div class="skills-grid">
+          <!-- Programming Languages -->
+          <div class="glass-card skills-card">
+            <h3>
+              <i data-lucide="terminal" width="18" height="18" style="color: var(--secondary)"></i>
+              Linguaggi di Programmazione
+            </h3>
+            <div class="skill-tag-list">
+              <span class="skill-tag">Python (NumPy, Pandas)</span>
+              <span class="skill-tag">C/C++</span>
+              <span class="skill-tag">MATLAB</span>
+              <span class="skill-tag">SQL</span>
+              <span class="skill-tag">R</span>
+            </div>
+          </div>
+
+          <!-- Applied Mathematics -->
+          <div class="glass-card skills-card">
+            <h3>
+              <i data-lucide="binary" width="18" height="18" style="color: var(--secondary)"></i>
+              Matematica Applicata
+            </h3>
+            <div class="skill-tag-list">
+              <span class="skill-tag">Inferenza Bayesiana</span>
+              <span class="skill-tag">MCMC (Monte Carlo)</span>
+              <span class="skill-tag">Ottimizzazione Numerica</span>
+              <span class="skill-tag">Crittografia</span>
+              <span class="skill-tag">Modelli di Diffusione</span>
+            </div>
+          </div>
+
+          <!-- Theoretical Mathematics -->
+          <div class="glass-card skills-card">
+            <h3>
+              <i data-lucide="function-square" width="18" height="18" style="color: var(--secondary)"></i>
+              Matematica Teorica
+            </h3>
+            <div class="skill-tag-list">
+              <span class="skill-tag">Analisi Matematica I & II</span>
+              <span class="skill-tag">Analisi Complessa</span>
+              <span class="skill-tag">Algebra Lineare</span>
+              <span class="skill-tag">Geometria</span>
+              <span class="skill-tag">Logica Matematica</span>
+            </div>
+          </div>
+
+          <!-- Software and Tools -->
+          <div class="glass-card skills-card">
+            <h3>
+              <i data-lucide="settings" width="18" height="18" style="color: var(--secondary)"></i>
+              Software & Strumenti
+            </h3>
+            <div class="skill-tag-list">
+              <span class="skill-tag">LaTeX</span>
+              <span class="skill-tag">Git / GitHub</span>
+              <span class="skill-tag">Microsoft Office</span>
+              <span class="skill-tag">VS Code</span>
+            </div>
+          </div>
+
+          <!-- Languages -->
+          <div class="glass-card skills-card">
+            <h3>
+              <i data-lucide="globe" width="18" height="18" style="color: var(--secondary)"></i>
+              Lingue straniere
+            </h3>
+            <div class="lang-list">
+              <div class="lang-item">
+                <span>Italiano</span>
+                <span class="lang-level">Madrelingua</span>
+              </div>
+              <div class="lang-item">
+                <span>Inglese</span>
+                <span class="lang-level">Livello B2+ (IELTS)</span>
+              </div>
+              <div class="lang-item">
+                <span>Tedesco</span>
+                <span class="lang-level">Livello B1</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Projects Section -->
+      <section id="projects" class="section container">
+        <div class="section-header">
+          <h2>Progetti Evidenziati</h2>
+          <p>Una selezione del mio lavoro accademico ed extra-curricolare</p>
+        </div>
+        
+        <div class="projects-grid">
+          
+          <!-- Project 1 -->
+          <div class="glass-card project-card tilt-card">
+            <span class="project-badge">Machine Learning / 3D Object Detection</span>
+            <h3>DiffuBox: Refining 3D Object Detection</h3>
+            <p>
+              Sviluppo e implementazione di un modello di diffusione point-based per l'affinamento di bounding box 3D LiDAR.
+            </p>
+            <ul class="project-bullets">
+              <li>Condizionamento del modello su point clouds LiDAR per calcolare posizionamento, scala e rotazione degli orizzonti d'interesse.</li>
+              <li>Superamento dei limiti legati al dominio shift (cambio di sensori/condizioni esterne).</li>
+            </ul>
+          </div>
+
+          <!-- Project 2 -->
+          <div class="glass-card project-card tilt-card">
+            <span class="project-badge">Computational Science / Statistica</span>
+            <h3>Bayesian Image Analysis in Fourier Space</h3>
+            <p>
+              Framework Bayesiano in Python nello spazio di Fourier per la restorazione ad alta accuratezza di immagini microscopiche.
+            </p>
+            <ul class="project-bullets">
+              <li>Utilizzo di ottimizzatori MAP e campionamento MCMC (Markov Chain Monte Carlo) parallelizzato per gestire l'inferenza spaziale.</li>
+              <li>Restorazione rapida di segnali affetti da forte rumore gaussiano e poissoniano.</li>
+            </ul>
+          </div>
+
+          <!-- Project 3 -->
+          <div class="glass-card project-card tilt-card">
+            <span class="project-badge">Python Data Analysis</span>
+            <h3>Quantitative Stock Market Analysis</h3>
+            <p>
+              Analisi quantitativa storica di indici di borsa ed andamenti azionari finanziari in Python.
+            </p>
+            <ul class="project-bullets">
+              <li>Manipolazione e calcolo vettoriale di grossi dataset storici tramite NumPy e Pandas.</li>
+              <li>Calcolo dei profili di rischio, volatilità storica, medie mobili esponenziali e portafogli ottimali.</li>
+            </ul>
+          </div>
+
+          <!-- Project 4 -->
+          <div class="glass-card project-card tilt-card">
+            <span class="project-badge">Tesi Triennale / Crittografia</span>
+            <h3>Fondamenti matematici della Crittografia</h3>
+            <p>
+              Tesi di laurea incentrata sulla transizione matematica dai crittosistemi classici agli standard di sicurezza quantistici.
+            </p>
+            <ul class="project-bullets">
+              <li>Analisi algebrica dettagliata dell'algoritmo asimmetrico RSA e basi di aritmetica modulare.</li>
+              <li>Studio delle risposte difensive a minacce derivanti dall'Algoritmo di Shor tramite protocolli QKD (BB84).</li>
+            </ul>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- Academic Courses -->
+      <section class="section container">
+        <div class="section-header">
+          <h2>Corsi del 1° Anno di Magistrale</h2>
+          <p>Gli insegnamenti chiave del percorso in Computational Science all'USI</p>
+        </div>
+        
+        <div class="courses-grid">
+          <!-- Course 1 -->
+          <div class="course-card">
+            <div class="course-icon-box">
+              <i data-lucide="cpu" width="18" height="18"></i>
+            </div>
+            <div class="course-info">
+              <span>Machine Learning</span>
+              <h4>Advanced Topics in ML</h4>
+            </div>
+          </div>
+
+          <!-- Course 2 -->
+          <div class="course-card">
+            <div class="course-icon-box">
+              <i data-lucide="help-circle" width="18" height="18"></i>
+            </div>
+            <div class="course-info">
+              <span>Bayesian Methods</span>
+              <h4>Introducing to Bayesian Learning</h4>
+            </div>
+          </div>
+
+          <!-- Course 3 -->
+          <div class="course-card">
+            <div class="course-icon-box">
+              <i data-lucide="network" width="18" height="18"></i>
+            </div>
+            <div class="course-info">
+              <span>Probabilistic Models</span>
+              <h4>Graphical Models</h4>
+            </div>
+          </div>
+
+          <!-- Course 4 -->
+          <div class="course-card">
+            <div class="course-icon-box">
+              <i data-lucide="shuffle" width="18" height="18"></i>
+            </div>
+            <div class="course-info">
+              <span>Stochastic Math</span>
+              <h4>Stochastic Methods</h4>
+            </div>
+          </div>
+
+          <!-- Course 5 -->
+          <div class="course-card">
+            <div class="course-icon-box">
+              <i data-lucide="grid" width="18" height="18"></i>
+            </div>
+            <div class="course-info">
+              <span>Numerical PDEs</span>
+              <h4>Discretization Methods</h4>
+            </div>
+          </div>
+
+          <!-- Course 6 -->
+          <div class="course-card">
+            <div class="course-icon-box">
+              <i data-lucide="calculator" width="18" height="18"></i>
+            </div>
+            <div class="course-info">
+              <span>Pure Math</span>
+              <h4>Probability and Measure</h4>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Contact Section -->
+      <section id="contact" class="section container">
+        <div class="section-header">
+          <h2>Contatti</h2>
+          <p>Mettiti in contatto per opportunità di stage, collaborazioni o tutoring</p>
+        </div>
+        
+        <div class="contact-grid">
+          <!-- Info Column -->
+          <div class="contact-info-list">
+            
+            <div class="contact-info-item">
+              <div class="contact-icon-box">
+                <i data-lucide="mail"></i>
+              </div>
+              <div class="contact-info-text">
+                <h4>E-mail</h4>
+                <p>rvisconti2019@gmail.com</p>
+              </div>
+            </div>
+
+            <div class="contact-info-item">
+              <div class="contact-icon-box">
+                <i data-lucide="phone"></i>
+              </div>
+              <div class="contact-info-text">
+                <h4>Telefono</h4>
+                <p>+41 76 803 23 93</p>
+              </div>
+            </div>
+
+            <div class="contact-info-item">
+              <div class="contact-icon-box">
+                <i data-lucide="map-pin"></i>
+              </div>
+              <div class="contact-info-text">
+                <h4>Posizione</h4>
+                <p>Pregassona, Lugano, Svizzera</p>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Contact Form Card -->
+          <div class="glass-card">
+            <form class="contact-form" onsubmit="event.preventDefault(); alert('Grazie per il messaggio! (Questa è una demo statica)');">
+              <div class="form-row">
+                <div class="form-field">
+                  <label for="frm-name">Nome</label>
+                  <input type="text" id="frm-name" placeholder="Il tuo nome" required />
+                </div>
+                <div class="form-field">
+                  <label for="frm-email">Email</label>
+                  <input type="email" id="frm-email" placeholder="nome@esempio.com" required />
+                </div>
+              </div>
+              <div class="form-field">
+                <label for="frm-subject">Oggetto</label>
+                <input type="text" id="frm-subject" placeholder="Oggetto del messaggio" required />
+              </div>
+              <div class="form-field">
+                <label for="frm-msg">Messaggio</label>
+                <textarea id="frm-msg" rows="4" placeholder="Scrivi il tuo messaggio qui..." required></textarea>
+              </div>
+              <button type="submit" class="btn btn-primary" style="align-self: flex-start;">
+                Invia Messaggio
+                <i data-lucide="send" width="16" height="16"></i>
+              </button>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      <!-- Footer -->
+      <footer>
+        <div class="container">
+          <p>© 2026 Riccardo Visconti. Sviluppato ispirandosi ai componenti React Bits e animato con Anime.js.</p>
+        </div>
+      </footer>
+
+    </div>
+
+    <!-- ==========================================
+         JAVASCRIPT CONTROLLERS
+         ========================================== -->
+    <script>
+      // 1. Initialize Lucide Icons
+      lucide.createIcons();
+
+      // 2. Custom Cursor follow effect
+      const cursor = document.getElementById('custom-cursor');
+      let mouseX = -100;
+      let mouseY = -100;
+      let cursorX = -100;
+      let cursorY = -100;
+
+      document.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+      });
+
+      function lerpCursor() {
+        let dx = mouseX - cursorX;
+        let dy = mouseY - cursorY;
+        // smooth spring factor
+        cursorX += dx * 0.12;
+        cursorY += dy * 0.12;
+        
+        cursor.style.transform = `translate3d(${cursorX - 10}px, ${cursorY - 10}px, 0)`;
+        requestAnimationFrame(lerpCursor);
+      }
+      requestAnimationFrame(lerpCursor);
+
+      // Hide cursor when leaving window
+      document.addEventListener('mouseleave', () => {
+        cursor.style.opacity = 0;
+      });
+      document.addEventListener('mouseenter', () => {
+        cursor.style.opacity = 0.8;
+      });
+
+      // 3. Particles Canvas rendering loop
+      const canvas = document.getElementById('particles-canvas');
+      const ctx = canvas.getContext('2d');
+
+      let width = (canvas.width = window.innerWidth);
+      let height = (canvas.height = window.innerHeight);
+
+      window.addEventListener('resize', () => {
+        width = canvas.width = window.innerWidth;
+        height = canvas.height = window.innerHeight;
+      });
+
+      const particles = [];
+      const particleCount = 60;
+      const colors = ['#8b5cf6', '#06b6d4', '#ffffff'];
+
+      for (let i = 0; i < particleCount; i++) {
+        particles.push({
+          x: Math.random() * width,
+          y: Math.random() * height,
+          vx: (Math.random() - 0.5) * 0.3,
+          vy: (Math.random() - 0.5) * 0.3,
+          size: Math.random() * 1.5 + 1,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          alpha: Math.random() * 0.4 + 0.1
+        });
+      }
+
+      function drawParticles() {
+        ctx.clearRect(0, 0, width, height);
+
+        // Draw web lines
+        for (let i = 0; i < particles.length; i++) {
+          for (let j = i + 1; j < particles.length; j++) {
+            const p1 = particles[i];
+            const p2 = particles[j];
+            const dx = p1.x - p2.x;
+            const dy = p1.y - p2.y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+
+            if (dist < 120) {
+              ctx.save();
+              ctx.globalAlpha = ((120 - dist) / 120) * 0.08;
+              ctx.beginPath();
+              ctx.moveTo(p1.x, p1.y);
+              ctx.lineTo(p2.x, p2.y);
+              ctx.strokeStyle = p1.color;
+              ctx.lineWidth = 0.5;
+              ctx.stroke();
+              ctx.restore();
+            }
+          }
+        }
+
+        // Draw and update particle circles
+        particles.forEach(p => {
+          p.x += p.vx;
+          p.y += p.vy;
+
+          if (p.x < 0 || p.x > width) p.vx *= -1;
+          if (p.y < 0 || p.y > height) p.vy *= -1;
+
+          // Mouse push repulsion
+          const mdx = mouseX - p.x;
+          const mdy = mouseY - p.y;
+          const mdist = Math.sqrt(mdx * mdx + mdy * mdy);
+          if (mdist < 100 && mdist > 0.1) {
+            const force = (100 - mdist) / 100;
+            p.x -= (mdx / mdist) * force * 1.2;
+            p.y -= (mdy / mdist) * force * 1.2;
+          }
+
+          ctx.save();
+          ctx.globalAlpha = p.alpha;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+          ctx.fillStyle = p.color;
+          ctx.fill();
+          ctx.restore();
+        });
+
+        requestAnimationFrame(drawParticles);
+      }
+      drawParticles();
+
+      // 4. Interactive 3D Card tilt effect (TiltedCard)
+      const profileCard = document.getElementById('profile-card');
+      if (profileCard) {
+        profileCard.addEventListener('mousemove', (e) => {
+          const rect = profileCard.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+          
+          const xc = rect.width / 2;
+          const yc = rect.height / 2;
+          
+          const dx = x - xc;
+          const dy = y - yc;
+          
+          const rx = -(dy / yc) * 15; // rotate degree amplitude
+          const ry = (dx / xc) * 15;
+          
+          profileCard.style.transform = `rotateX(${rx}deg) rotateY(${ry}deg) scale3d(1.05, 1.05, 1.05)`;
+        });
+
+        profileCard.addEventListener('mouseleave', () => {
+          profileCard.style.transform = `rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
+        });
+      }
+
+      // 3D tilt for projects cards
+      const tiltCards = document.querySelectorAll('.tilt-card');
+      tiltCards.forEach(card => {
+        card.addEventListener('mousemove', (e) => {
+          const rect = card.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+          const xc = rect.width / 2;
+          const yc = rect.height / 2;
+          const dx = x - xc;
+          const dy = y - yc;
+          const rx = -(dy / yc) * 8;
+          const ry = (dx / xc) * 8;
+          card.style.transform = `perspective(800px) rotateX(${rx}deg) rotateY(${ry}deg) scale3d(1.02, 1.02, 1.02)`;
+        });
+
+        card.addEventListener('mouseleave', () => {
+          card.style.transform = `perspective(800px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
+        });
+      });
+
+      // 5. Anime.js scroll triggered entry animations
+      // Animate Hero title on load
+      window.addEventListener('load', () => {
+        const titleEl = document.getElementById('hero-title');
+        const text = titleEl.innerText;
+        titleEl.innerHTML = '';
+        
+        // Wrap characters
+        text.split('').forEach(char => {
+          const span = document.createElement('span');
+          span.style.display = 'inline-block';
+          span.style.whiteSpace = 'pre';
+          span.innerText = char;
+          titleEl.appendChild(span);
+        });
+
+        anime({
+          targets: '#hero-title span',
+          translateY: [40, 0],
+          opacity: [0, 1],
+          delay: anime.stagger(40),
+          duration: 1000,
+          easing: 'easeOutElastic(1, .8)'
+        });
+      });
+
+      // Anime scroll reveal observer
+      const revealElements = document.querySelectorAll('.glass-card, .course-card');
+      const observerOptions = {
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.1
+      };
+
+      const revealObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            anime({
+              targets: entry.target,
+              translateY: [30, 0],
+              opacity: [0, 1],
+              duration: 800,
+              easing: 'easeOutQuart'
+            });
+            observer.unobserve(entry.target);
+          }
+        });
+      }, observerOptions);
+
+      revealElements.forEach(el => {
+        el.style.opacity = 0; // hide initially
+        revealObserver.observe(el);
+      });
+
+      // 6. Theme toggler
+      const themeToggle = document.getElementById('theme-toggle');
+      themeToggle.addEventListener('click', () => {
+        document.documentElement.classList.toggle('light-theme');
+        const isLight = document.documentElement.classList.contains('light-theme');
+        themeToggle.innerHTML = isLight 
+          ? '<i data-lucide="moon"></i>' 
+          : '<i data-lucide="sun"></i>';
+        lucide.createIcons();
+      });
+    </script>
+  </body>
+</html>
